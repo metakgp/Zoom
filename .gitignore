@@ -1,0 +1,4 @@
+SLACK_URL
+*.json
+__pycache__
+FB_ACCESS_TOKEN

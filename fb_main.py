@@ -9,10 +9,6 @@ def slack_notification(data):
 	}
 	r = requests.post(
 		url, headers=headers, data=data)
-	# log(os.environ["SLACK_WEBHOOK_URL"])
-	# if r.status_code != 200:
-		# log("in slack_notification : {}".format(r.status_code))
-		# log(r.text)
 def message_sender (old_id) :
 	posts = json.load(open('metakgp.json' , 'r'))
 	for post in posts :
@@ -36,14 +32,12 @@ def message_sender (old_id) :
 				data=json.dumps({
 				"text": "*{}*\n{}\nPosted on : {} at {} \n<https://www.facebook.com/{}|View the post>".format('MetaKGP',post['message'],post['real_date'],post['real_time'],post['id'])
 				})
-#				print("<a href={}>Image</a>\n{}\nPosted on : {} at {} \n<a href='https://www.facebook.com/{}'>View the post</a>".format(post['pic'],post['message'],post['real_date'],post['real_time'],post['id']))
 			slack_notification(data)
 def main() :
 	try :
 		lastid = json.load(open('lastid.json','r'))
 	except FileNotFoundError :
 		lastid= {'last_post' : None}
-	# for page in pages :
 	new_id = get_id("metakgp")
 	if new_id != lastid['last_post'] : #It means something new was posted
 		message_sender(lastid['last_post'])

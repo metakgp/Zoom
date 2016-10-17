@@ -8,9 +8,6 @@ import urllib.request
 import facepy
 from facepy import GraphAPI
 import commonregex
-
-#from frontend import write_html
-
 # Put Facebook 'Access Token' in a plain text file ACCESS_TOKEN in same dir.
 # To get an access token follow this SO answer:
 # http://stackoverflow.com/a/16054555/1780891
@@ -19,17 +16,6 @@ with open('./FB_ACCESS_TOKEN', 'r') as f:
 	access_token = f.readline().rstrip('\n')
 
 graph = GraphAPI(access_token)
-
-
-# def get_comments(post_id):
-#     base_query = post_id + '/comments'
-
-#     # scrape the first page
-#     print('scraping:', base_query)
-#     comments = graph.get(base_query)
-#     data = comments['data']
-#     return data
-
 
 def get_picture(post_id, dir="."):
 	base_query = post_id + '?fields=object_id'
@@ -41,11 +27,6 @@ def get_picture(post_id, dir="."):
 	try:
 		pic = graph.get('{}?fields=images'.format(pic_id))
 		return (pic['images'][0]['source'])
-		# f_name = "{}/{}.png".format(dir, pic_id)
-		# f_handle = open(f_name, "wb")
-		# f_handle.write(pic)
-		# f_handle.close()
-		# return "{}.png".format(pic_id)
 	except facepy.FacebookError:
 		return None
 	except facepy.exceptions.FacebookError: 
@@ -61,15 +42,12 @@ def get_event_picture(post_id, dir="."):
 	try:
 		pic = graph.get('{}?fields=cover'.format(pic_id))
 		return (pic['cover']['source'])
-		# urllib.request.urlretrieve(pic['cover']['source'] , "{}/{}.png".format(dir, pic_id))
-		# return "{}.png".format(pic_id)
 	except facepy.FacebookError:
 		return None
 
 
 def get_link(post_id):
 	base_query = post_id + '?fields=link'
-
 	try:
 		link = graph.get(base_query)['link']
 	except KeyError:
@@ -123,9 +101,7 @@ def get_feed(page_id, pages=1):
 		last_post_time = parse("1950-01-01T12:05:06+0000")
 
 	base_query = page_id + '/feed?limit=2'
-
 	# scrape the first page
-	# logger.addLog('scraping:{}'.format(base_query),"Facebook")
 	feed = graph.get(base_query)
 	new_page_data = feed['data']
 
@@ -155,7 +131,6 @@ def get_feed(page_id, pages=1):
 
 			data.extend(new_page_data)
 		except facepy.exceptions.OAuthError:
-			# logger.addLog('start again at {}'.format(the_query) , 'Facebook')
 			break
 
 		# determine the next page, until there isn't one
@@ -166,7 +141,6 @@ def get_feed(page_id, pages=1):
 			if next_search:
 				the_until_arg = next_search.group(1)
 		except IndexError:
-			# logger.addLog('last page...',"Facebook")
 			next_page = False
 		pages = pages - 1
 		for post_dict in data:
@@ -184,9 +158,6 @@ def get_feed(page_id, pages=1):
 
 	data.extend(old_data)
 	data.sort(key=lambda x: parse(x['created_time']), reverse=True)
-
-	#json.dump(data, open('FB/page_json/{}.json'.format(page_id), 'w'))
-
 	return data
 
 
@@ -216,10 +187,6 @@ def get_aggregated_feed(_id):
 	Input: A list of tuples
 	Output: Combined list of posts sorted by timestamp
 	"""
-	#data = list()
-	#for page_name, _id in pages:
-	# global logger
-	# logger = log 
 	page_data = get_feed(_id)
 	for data_dict in page_data:
 		data_dict['source'] = _id
@@ -230,22 +197,12 @@ def get_aggregated_feed(_id):
 	for post in page_data:
 		if 'message' not in post:
 			post['message'] = "" #adding dummy message so if a post have no text in it send message will not give error
-		 #   # post['message'] = fixnewlines(post['message'])
-			# if 'flag' not in post :
-			# 	post['message'] = enable_links(post['message'],parser)
-			# 	post['flag'] = 1 
-		# else :
-			
 	page_data = remove_duplicates(page_data)    
 	page_data.sort(key=lambda x: parse(x['created_time']), reverse=True)
 	#
 	json.dump(page_data, open('{}.json'.format(_id), 'w'))
 	return page_data[0]['id']
 
-	#ret_json = {'id':_id , 'data':data}
-	#return ret_json
-# def fixnewlines(message):
-#     return message.replace('\n', ' <br> ')
 def enable_links(message,parser):
 	
 	links = parser.links(message)
@@ -266,28 +223,5 @@ def enable_links(message,parser):
 			link = link[0:25]
 			message = message.replace(link, "<{}>|{}".format(http_link, link) , 1)
 		else:    
-		   # message = shortify_string(message)
 			message = message.replace(link, "<{}>|{}".format(http_link, link[0:25]+"...") ,1 ) 
 	return message
-
-if __name__ == "__main__":
-	# Great thanks to https://gist.github.com/abelsonlive/4212647
-	news_pages = [('The Scholar\'s Avenue', 'scholarsavenue'),
-				  ('Awaaz IIT Kharagpur', 'awaaziitkgp'),
-				  ('Technology Students Gymkhana', 'TSG.IITKharagpur'),
-				  ('Technology IIT KGP', 'iitkgp.tech'),
-				  ('Metakgp', 'metakgp')]
-   # for_later = ['Cultural-IIT-Kharagpur']
-	get_aggregated_feed('metakgp')
-	# json_data = get_aggregated_feed(news_pages)
-	# data = remove_duplicates(json_data['data'])
-	# data = prettify_date(data)
-	# parser = commonregex.CommonRegex()
-	# for post in data:
-	#     if 'message' in post:
-	#         post['message'] = fixnewlines(post['message'])
-	#         if 'flag' not in post :
-	#             post['message'] = enable_links(post['message'],parser)
-	#             post['flag'] = 1 
-	# json.dump(data, open('FB/page_json/{}.json'.format(json_data['id']), 'w'))
-	#write_html(data, 'FB/page_json/index.html')

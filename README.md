@@ -13,3 +13,6 @@ It can be done by going <a href="https://www.google.com/settings/security/lessse
 <br>
 <br>
 Note that this script requires python 3 or higher to run.
+
+## License
+GNU LGPL.

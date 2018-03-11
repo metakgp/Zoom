@@ -9,7 +9,7 @@ It can be done by going <a href="https://www.google.com/settings/security/lessse
 <br><br>
 * Get a Facebook API token and save it in file name `ACCESS_TOKEN`. See this [StackOverflow Answer](http://stackoverflow.com/a/16054555/1780891).
 <br>
-* Create a file named `SLACK_URL` and update it with your webhook url.
+* Create a file named `SLACK_URL` and update it with your webhook url. 
 <br>
 <br>
 Note that this script requires python 3 or higher to run.

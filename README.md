@@ -1,5 +1,5 @@
 # Zoom
-This script sends an email when a new post is posted on the Facebook page <a href="https://www.facebook.com/metakgp">MetaKGP></a> to metakgp-announce@googlegroups.com. It will also update the #recent-changes in slack channel of MetaKGP.
+This script sends an email when a new post is posted on the Facebook page <a href="https://www.facebook.com/metakgp">MetaKGP</a> to metakgp-announce@googlegroups.com. It will also update the #recent-changes in slack channel of MetaKGP.
 
 ## How to use 
 Create a file CONFIG in the root diretory as follows : <br>

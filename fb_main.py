@@ -1,11 +1,11 @@
 from fbscraper import get_aggregated_feed as get_id
 import json
 import requests
+import os
 
 
 def slack_notification(data):
-    with open('./SLACK_URL', 'r') as f:
-        url = f.readline().rstrip('\n')
+    url = os.getenv('SLACK_URL')
     headers = {
         "Content-Type": "application/json"
     }
@@ -52,4 +52,5 @@ def main():
         message_sender(lastid['last_post'])
         lastid['last_post'] = new_id
     json.dump(lastid, open('lastid.json', 'w'))
+
 main()

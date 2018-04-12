@@ -41,4 +41,3 @@ def send_mail(mail_subject, mail_body) :
 
 	except :
 		return False
-	

@@ -4,7 +4,7 @@ import re
 import json
 from dateutil.parser import parse, tz
 import urllib.request
-
+import os
 import facepy
 from facepy import GraphAPI
 import commonregex
@@ -12,8 +12,7 @@ import commonregex
 # To get an access token follow this SO answer:
 # http://stackoverflow.com/a/16054555/1780891
 
-with open('./FB_ACCESS_TOKEN', 'r') as f:
-    access_token = f.readline().rstrip('\n')
+access_token = os.getenv('FB_ACCESS_TOKEN')
 
 graph = GraphAPI(access_token)
 

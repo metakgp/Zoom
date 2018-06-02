@@ -6,26 +6,28 @@ import requests
 
 logger = Logger.Logger(name='RunLog')
 key = os.getenv('MAILGUN_API_KEY')
-recipient = os.getenv('SENDEE_EMAIL_ID')
-sandbox = 'zoom.metakgp.org'
+sender = os.getenv('SENDER_EMAIL_ID')
+recipient = os.getenv('RECIPIENT_EMAIL_ID')
+sandbox = os.getenv('MAILGUN_SANDBOX_URL')
 
 
 def send_mail(mail_subject, mail_body) :
-	#sending mail
-	try:
-		request_url = 'https://api.mailgun.net/v2/{0}/messages'.format(sandbox)
+    #sending mail
+    request_url = 'https://api.mailgun.net/v2/{0}/messages'.format(sandbox)
 
-        request = requests.post(request_url, auth=('api', key), data={
-            'from': 'zoom@zoom.metakgp.org',
-            'to': recipient,
-            'subject': mail_subject,
-            'text': mail_body
-        })
+    request = requests.post(request_url, auth=('api', key), data={
+        'from': sender,
+        'to': recipient,
+        'subject': mail_subject,
+        'text': mail_body
+    })
 
-        print('Status: {0}'.format(request.status_code))
-        print('Body:   {0}'.format(request.text))
+    print('Status: {0}'.format(request.status_code))
+    print('Body:   {0}'.format(request.text))
 
-		return True
+    if (request.status_code==200):
+        return True
 
-	except :
-		return False
+    else:
+        return False
+

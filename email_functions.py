@@ -7,7 +7,6 @@ import requests
 logger = Logger.Logger(name='RunLog')
 key = os.getenv('MAILGUN_API_KEY')
 recipient = os.getenv('SENDEE_EMAIL_ID')
-passwd = os.getenv('EMAIL_PASS')
 sandbox = 'zoom.metakgp.org'
 
 
